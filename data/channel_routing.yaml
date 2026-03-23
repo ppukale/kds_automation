@@ -1,0 +1,23 @@
+# Order routing from Web/API channels to kitchen stations (KDS tablets).
+# Aligns automation roles in config/devices.yaml (gunner, bombardier, wingman, pilot).
+#
+# Source: Channels workflow — Web/API submits orders; backend routes line items to stations.
+
+routing:
+  gunner:
+    receives: "Only sides; corn; boneless; tenders"
+    notes: "KDS shows the Gunner subset of the order."
+
+  bombardier:
+    receives: "Only classic; classic + boneless; tenders"
+    notes: "KDS shows the Bombardier subset of the order."
+
+  wingman:
+    receives: "Flavors and spices"
+    notes: "KDS shows flavor/spice-related items."
+
+  pilot:
+    receives: "Full order — flavors, dips, drinks"
+    notes: "Full ticket view (e.g. pilot_station emulator)."
+
+# expo: present in framework roles but not shown on this diagram — define when product maps a fifth surface.

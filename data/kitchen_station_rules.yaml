@@ -1,0 +1,22 @@
+# Map line-item tags (order.items[].tags) to KDS stations.
+# Use non-overlapping tags where product rules differ (e.g. tenders vs tenders_classic).
+#
+# Validation runs only for stations that receive at least one line item after routing.
+# Pilot always validates the full order when items exist.
+
+station_tag_sets:
+  gunner:
+    - sides
+    - corn
+    - boneless
+    - tenders
+  bombardier:
+    - classic
+    - classic_boneless
+    - tenders_classic
+  wingman:
+    - flavors
+    - spices
+
+pilot:
+  shows_full_order: true

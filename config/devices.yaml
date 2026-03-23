@@ -1,0 +1,33 @@
+# Map logical roles to devices. The value of `udid` must match a line in `adb devices`
+# (serial column). Works for physical tablets and Android Studio emulators (AVDs).
+#
+# Emulators: boot each AVD from Android Studio Device Manager, then run `adb devices`.
+# Serials look like emulator-5554, emulator-5556, … (one port per running emulator).
+# Set `kind: emulator` to merge caps from capabilities.yaml → `emulator_common`.
+#
+# Example (after your AVDs are running):
+#   gunner:       { udid: "emulator-5554", role: gunner, kind: emulator }
+#   bombardier:   { udid: "emulator-5556", role: bombardier, kind: emulator }
+#   ...
+
+devices:
+  gunner:
+    udid: "REPLACE_WITH_GUNNER_UDID"
+    role: gunner
+    kind: emulator
+  bombardier:
+    udid: "REPLACE_WITH_BOMBARDIER_UDID"
+    role: bombardier
+    kind: emulator
+  wingman:
+    udid: "REPLACE_WITH_WINGMAN_UDID"
+    role: wingman
+    kind: emulator
+  pilot:
+    udid: "emulator-5554"
+    role: pilot
+    kind: emulator
+  expo:
+    udid: "REPLACE_WITH_EXPO_UDID"
+    role: expo
+    kind: emulator

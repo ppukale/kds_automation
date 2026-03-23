@@ -1,0 +1,32 @@
+# Shared Appium options + per-app overrides (merged at runtime).
+# Replace package/activity and app paths with your real AUT values.
+#
+# `emulator_common` is merged when a device entry has `kind: emulator` in devices.yaml
+# (Android Studio AVDs / emulators). Physical tablets can use `kind: device` or omit kind.
+
+common:
+  platformName: Android
+  automationName: UiAutomator2
+  newCommandTimeout: 120
+
+emulator_common:
+  appium:autoGrantPermissions: true
+  appium:disableWindowAnimation: true
+
+apps:
+  gunner:
+    appium:appPackage: "com.example.gunner"
+    appium:appActivity: ".MainActivity"
+    # appium:app: "./resources/apps/gunner.apk"
+  bombardier:
+    appium:appPackage: "com.example.bombardier"
+    appium:appActivity: ".MainActivity"
+  wingman:
+    appium:appPackage: "com.example.wingman"
+    appium:appActivity: ".MainActivity"
+  pilot:
+    appium:appPackage: "com.example.pilot"
+    appium:appActivity: ".MainActivity"
+  expo:
+    appium:appPackage: "com.example.expo"
+    appium:appActivity: ".MainActivity"

@@ -1,0 +1,7 @@
+users:
+  cashier:
+    username: "test_cashier"
+    pin: "0000"
+
+timeouts:
+  order_submit_s: 60

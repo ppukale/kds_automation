@@ -1,0 +1,31 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Reports & artifacts
+reports/logs/*.log
+reports/allure-results/
+reports/allure-report/
+*.apk
+*.aab
+
+# Local secrets / overrides
+.env
+config/local.yaml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Playwright
+playwright/.auth/

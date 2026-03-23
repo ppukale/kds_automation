@@ -1,0 +1,41 @@
+{
+  "sample_order": {
+    "channel_hint": "web",
+    "order_number": "ORD-10001",
+    "items": [
+      {
+        "sku": "FRIES-001",
+        "qty": 2,
+        "tags": ["sides"],
+        "display_name": "Large Fries"
+      }
+    ],
+    "note": "Tags drive KDS routing — see data/kitchen_station_rules.yaml"
+  },
+  "api_full_ticket": {
+    "channel_hint": "api",
+    "order_number": "ORD-API-7",
+    "source": "automation",
+    "items": [
+      {
+        "sku": "WINGS-001",
+        "qty": 1,
+        "tags": ["flavors", "spices"],
+        "display_name": "Buffalo Wings"
+      }
+    ],
+    "note": "Route to kitchen via API"
+  },
+  "multi_station_order": {
+    "channel_hint": "web",
+    "order_number": "ORD-90042",
+    "items": [
+      { "sku": "SIDE-01", "qty": 1, "tags": ["sides"], "display_name": "Corn Cup" },
+      { "sku": "CL-01", "qty": 1, "tags": ["classic", "tenders_classic"], "display_name": "Classic Tenders" },
+      { "sku": "SP-01", "qty": 1, "tags": ["flavors"], "display_name": "Garlic Parm" },
+      { "sku": "DIP-01", "qty": 1, "tags": ["dips"], "display_name": "Ranch Dip" },
+      { "sku": "DR-01", "qty": 1, "tags": ["drinks"], "display_name": "Cola" }
+    ],
+    "note": "Gunner/Bombardier/Wingman get tagged lines; Pilot must show full ticket including dips/drinks-only lines."
+  }
+}
