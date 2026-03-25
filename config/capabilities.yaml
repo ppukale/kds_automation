@@ -1,8 +1,8 @@
 # Shared Appium options + per-app overrides (merged at runtime).
 # Replace package/activity and app paths with your real AUT values.
 #
-# `emulator_common` is merged when a device entry has `kind: emulator` in devices.yaml
-# (Android Studio AVDs / emulators). Physical tablets can use `kind: device` or omit kind.
+# `emulator_common` is merged when `kind: emulator` in devices.yaml.
+# `device_common` is merged when `kind: device` (physical / Wi‑Fi tablets).
 
 common:
   platformName: Android
@@ -12,6 +12,17 @@ common:
 emulator_common:
   appium:autoGrantPermissions: true
   appium:disableWindowAnimation: true
+
+device_common:
+  # Grant runtime permissions automatically (install-time + session). Reduces manual Allow taps.
+  appium:autoGrantPermissions: true
+  appium:disableWindowAnimation: true
+  # Optional: grant specific permissions by name (Android 6+). Use if a dialog still appears.
+  # Example:
+  # appium:grantPermissions:
+  #   - android.permission.POST_NOTIFICATIONS
+  #   - android.permission.CAMERA
+  #   - android.permission.READ_EXTERNAL_STORAGE
 
 apps:
   gunner:
@@ -25,8 +36,6 @@ apps:
     appium:appPackage: "com.example.wingman"
     appium:appActivity: ".MainActivity"
   pilot:
-    appium:appPackage: "com.example.pilot"
-    appium:appActivity: ".MainActivity"
-  expo:
-    appium:appPackage: "com.example.expo"
-    appium:appActivity: ".MainActivity"
+    appium:appPackage: "com.loyverse.sale"
+    # Resolved from device: adb shell cmd package resolve-activity --brief com.loyverse.sale
+    appium:appActivity: "com.loyverse.presentantion.login.LoginActivity"

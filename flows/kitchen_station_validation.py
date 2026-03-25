@@ -38,22 +38,26 @@ class KitchenStationValidation:
         ticket = order_number_from_order(order) if verify_ticket else None
 
         def assert_station(
+            station_name: str,
             page: GunnerPage | BombardierPage | WingmanPage | PilotPage,
             rows: list[dict[str, Any]],
         ) -> None:
-            if ticket:
-                page.assert_line_texts_visible([ticket])
-            lines = line_display_strings_for_items(rows)
-            if lines:
-                page.assert_line_texts_visible(lines)
+            try:
+                if ticket:
+                    page.assert_line_texts_visible([ticket])
+                lines = line_display_strings_for_items(rows)
+                if lines:
+                    page.assert_line_texts_visible(lines)
+            except AssertionError as exc:
+                raise AssertionError(f"{station_name} validation failed: {exc}") from exc
 
-        # 1–3: only when the order contains line items routed to that station.
+        # POC sequence: Pilot first, then downstream stations.
+        assert_station("pilot", PilotPage(self._devices.get("pilot")), items)
+
+        # Then validate routed stations only when items are present for that station.
         if part["gunner"]:
-            assert_station(GunnerPage(self._devices.get("gunner")), part["gunner"])
+            assert_station("gunner", GunnerPage(self._devices.get("gunner")), part["gunner"])
         if part["bombardier"]:
-            assert_station(BombardierPage(self._devices.get("bombardier")), part["bombardier"])
+            assert_station("bombardier", BombardierPage(self._devices.get("bombardier")), part["bombardier"])
         if part["wingman"]:
-            assert_station(WingmanPage(self._devices.get("wingman")), part["wingman"])
-
-        # 4: Pilot shows the full ticket (order number + every line with qty).
-        assert_station(PilotPage(self._devices.get("pilot")), items)
+            assert_station("wingman", WingmanPage(self._devices.get("wingman")), part["wingman"])

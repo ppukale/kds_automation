@@ -3,5 +3,12 @@ users:
     username: "test_cashier"
     pin: "0000"
 
+# Pilot tablet app (see tests/test_pilot_functional.py). Use non-production test accounts only.
+pilot_app:
+  login:
+    email: "pukalesearch@gmail.com"
+    password: "Test@1234"
+  receipt_email: "receipt_test@example.com"
+
 timeouts:
   order_submit_s: 60

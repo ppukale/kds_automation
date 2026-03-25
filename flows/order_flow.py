@@ -33,8 +33,13 @@ class OrderFlow:
             self._pos.place_order_from_data(self._order)
         elif self._channel == "api":
             submit_order_via_api(self._order)
+        elif self._channel == "tablet":
+            # No Playwright; no API submit — only KDS assertions (order must exist via other means).
+            return
         else:
-            raise ValueError(f"Unsupported channel: {self._channel!r}. Use 'web' or 'api'.")
+            raise ValueError(
+                f"Unsupported channel: {self._channel!r}. Use 'web', 'api', or 'tablet'."
+            )
 
     def gunner_sees_app_shell(self) -> bool:
         driver = self._devices.get("gunner")

@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+from utils.adb_udid_heal import maybe_heal_wireless_udid, persist_healed_udid_local
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _CONFIG_DIR = _PROJECT_ROOT / "config"
@@ -24,7 +27,16 @@ def project_root() -> Path:
 
 
 def load_devices() -> dict[str, Any]:
-    return _read_yaml(_CONFIG_DIR / "devices.yaml")
+    base = _read_yaml(_CONFIG_DIR / "devices.yaml")
+    local = _read_yaml(_CONFIG_DIR / "local.yaml")
+    out: dict[str, Any] = dict(base)
+    devices_base: dict[str, Any] = dict(out.get("devices") or {})
+    raw_local_dev = local.get("devices")
+    local_dev = raw_local_dev if isinstance(raw_local_dev, dict) else {}
+    if local_dev:
+        devices_base = _deep_merge(devices_base, local_dev)
+    out["devices"] = devices_base
+    return out
 
 
 def load_env() -> dict[str, Any]:
@@ -67,8 +79,23 @@ def merged_appium_capabilities(role: str) -> dict[str, Any]:
     if kind == "emulator":
         emulator_common = doc.get("emulator_common") or {}
         caps.update(emulator_common)
+    elif kind == "device":
+        device_common = doc.get("device_common") or {}
+        caps.update(device_common)
     caps.update(per_app)
-    caps["udid"] = udid
+    udid_str = str(udid).strip()
+    heal_on = os.getenv("HEAL_WIRELESS_UDID", "1").lower() in ("1", "true", "yes")
+    if heal_on:
+        healed = maybe_heal_wireless_udid(udid_str, role=role)
+        persist_on = os.getenv("HEAL_WIRELESS_UDID_PERSIST", "").lower() in (
+            "1",
+            "true",
+            "yes",
+        )
+        if persist_on and healed != udid_str:
+            persist_healed_udid_local(role, healed)
+        udid_str = healed
+    caps["udid"] = udid_str
     return caps
 
 

@@ -21,3 +21,14 @@ class MobileActions:
     def tap(self, locator: tuple[str, str], timeout_s: float | None = None) -> None:
         el = self.wait_visible(locator, timeout_s)
         el.click()
+
+    def tap_clickable(self, locator: tuple[str, str], timeout_s: float | None = None) -> None:
+        """Use when visibility_of_element_located fails but the control is still clickable (common on Android)."""
+        wait = WebDriverWait(self.driver, timeout_s or self.default_timeout_s)
+        el = wait.until(ec.element_to_be_clickable(locator))
+        el.click()
+
+    def type_text(self, locator: tuple[str, str], text: str, *, timeout_s: float | None = None) -> None:
+        el = self.wait_visible(locator, timeout_s)
+        el.clear()
+        el.send_keys(text)

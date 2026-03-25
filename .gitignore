@@ -15,6 +15,7 @@ env/
 reports/logs/*.log
 reports/allure-results/
 reports/allure-report/
+reports/html/
 *.apk
 *.aab
 

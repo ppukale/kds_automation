@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import os
-
 import pytest
 
 from flows.kitchen_station_validation import KitchenStationValidation
 from flows.order_flow import OrderFlow
+from utils.web_env import configured_web_base_url, web_base_url_skip_reason
 
 
 @pytest.mark.e2e
@@ -16,8 +15,8 @@ def test_order_end_to_end(
     channel: str,
     order_profile: dict,
 ) -> None:
-    if os.getenv("RUN_E2E") != "1":
-        pytest.skip("Set RUN_E2E=1, configure UDIDs, Appium, apps, and POS URL.")
+    if channel == "web" and configured_web_base_url() is None:
+        pytest.skip(web_base_url_skip_reason())
 
     flow = OrderFlow(
         device_manager,

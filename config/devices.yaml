@@ -5,6 +5,11 @@
 # Serials look like emulator-5554, emulator-5556, … (one port per running emulator).
 # Set `kind: emulator` to merge caps from capabilities.yaml → `emulator_common`.
 #
+# IP-based real devices (ADB over Wi-Fi):
+# - After `adb connect <ip>:<port>`, `adb devices` shows "<ip>:<port>" (port from Wireless debugging).
+# - Use that exact string as `udid` and set `kind: device`.
+# - If two lines appear (IP:port and adb-..._tcp), prefer the "10.x.x.x:port" form for udid.
+#
 # Example (after your AVDs are running):
 #   gunner:       { udid: "emulator-5554", role: gunner, kind: emulator }
 #   bombardier:   { udid: "emulator-5556", role: bombardier, kind: emulator }
@@ -24,10 +29,6 @@ devices:
     role: wingman
     kind: emulator
   pilot:
-    udid: "emulator-5554"
+    udid: "10.0.0.183:46623"
     role: pilot
-    kind: emulator
-  expo:
-    udid: "REPLACE_WITH_EXPO_UDID"
-    role: expo
-    kind: emulator
+    kind: device

@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import subprocess
+
 import pytest
 
-from utils import config_loader
+from utils import adb_udid_heal, config_loader
 
 
 @pytest.mark.smoke
 def test_config_files_load() -> None:
     devices = config_loader.load_devices()
     assert "devices" in devices
-    for role in ("gunner", "bombardier", "wingman", "pilot", "expo"):
+    for role in ("gunner", "bombardier", "wingman", "pilot"):
         assert role in devices["devices"]
 
     env = config_loader.load_env()
@@ -19,6 +21,7 @@ def test_config_files_load() -> None:
     assert "common" in caps
     assert "apps" in caps
     assert "emulator_common" in caps
+    assert "device_common" in caps
 
 
 @pytest.mark.smoke
@@ -56,3 +59,26 @@ def test_load_order_profile_from_orders_json() -> None:
 def test_merged_capabilities_requires_real_udid() -> None:
     with pytest.raises(ValueError, match="Set a real UDID"):
         config_loader.merged_appium_capabilities("gunner")
+
+
+@pytest.mark.smoke
+def test_wireless_udid_heal_updates_stale_port(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_run(cmd: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+        out = "List of devices attached\n10.0.0.183:46623\tdevice\n"
+        return subprocess.CompletedProcess(cmd, 0, stdout=out, stderr="")
+
+    monkeypatch.setattr(adb_udid_heal.subprocess, "run", fake_run)
+    assert adb_udid_heal.maybe_heal_wireless_udid("10.0.0.183:34461", role="pilot") == "10.0.0.183:46623"
+
+
+@pytest.mark.smoke
+def test_wireless_udid_heal_skips_non_ip_udids(monkeypatch: pytest.MonkeyPatch) -> None:
+    called: list[int] = []
+
+    def fake_run(*args: object, **kwargs: object) -> subprocess.CompletedProcess[str]:
+        called.append(1)
+        return subprocess.CompletedProcess(["adb"], 0, stdout="", stderr="")
+
+    monkeypatch.setattr(adb_udid_heal.subprocess, "run", fake_run)
+    assert adb_udid_heal.maybe_heal_wireless_udid("emulator-5554") == "emulator-5554"
+    assert called == []

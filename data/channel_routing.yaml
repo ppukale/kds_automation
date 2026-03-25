@@ -19,5 +19,3 @@ routing:
   pilot:
     receives: "Full order — flavors, dips, drinks"
     notes: "Full ticket view (e.g. pilot_station emulator)."
-
-# expo: present in framework roles but not shown on this diagram — define when product maps a fifth surface.

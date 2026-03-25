@@ -1,8 +1,13 @@
 # Test runner
 pytest>=8.0.0
 
-# Mobile
+# Mobile (Python client — talks to Appium over HTTP)
 Appium-Python-Client>=4.0.0
+#
+# UiAutomator2 is NOT a pip package. It is the Android driver for Appium Server (Node).
+# Install once on the machine that runs `appium`:
+#   appium driver install uiautomator2
+#   appium driver list --installed
 
 # Web
 playwright>=1.40.0
@@ -15,3 +20,4 @@ requests>=2.31.0
 
 # Reporting (optional)
 allure-pytest>=2.13.0
+pytest-html>=4.1.0
